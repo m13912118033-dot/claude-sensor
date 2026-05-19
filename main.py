@@ -1,11 +1,12 @@
 from fastapi import FastAPI
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import json
 import os
 
 app = FastAPI()
 
 FILE = "events.json"
+CST = timezone(timedelta(hours=8))
 
 def load():
     if os.path.exists(FILE):
@@ -23,7 +24,7 @@ def receive_event(type: str, value: str):
     events.append({
         "type": type,
         "value": value,
-        "time": datetime.now().isoformat()
+        "time": datetime.now(CST).isoformat()
     })
     save(events)
     return {"status": "ok"}
